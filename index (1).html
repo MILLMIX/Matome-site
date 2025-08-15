@@ -1,0 +1,380 @@
+<!doctype html>
+
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI HUB – ニュース・ツール・解説のまとめ</title>
+  <meta name="description" content="AIニュース、AIツール、使い方ガイド、用語集をひとまとめに。毎日アップデートできる軽量テンプレート。" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta property="og:title" content="AI HUB – ニュース・ツール・解説のまとめ" />
+  <meta property="og:description" content="AIニュース、AIツール、使い方ガイド、用語集をひとまとめに。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="/og-image.png" />
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🤖</text></svg>">
+  <style>
+    :root{
+      --bg:#0b1220; --card:#0f172a; --muted:#94a3b8; --text:#e2e8f0; --brand:#60a5fa; --accent:#22d3ee;
+      --light-bg:#f8fafc; --light-card:#ffffff; --light-text:#0f172a; --light-muted:#475569; --ring:#93c5fd;
+    }
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,Apple Color Emoji,Segoe UI Emoji;line-height:1.6;background:var(--light-bg);color:var(--light-text)}
+    @media (prefers-color-scheme: dark){body{background:var(--bg);color:var(--text)}}
+    .container{max-width:1100px;margin-inline:auto;padding:24px}
+    header{position:sticky;top:0;backdrop-filter:saturate(180%) blur(10px);z-index:50;border-bottom:1px solid #e2e8f0}
+    @media (prefers-color-scheme: dark){header{border-color:#1f2937}}
+    .nav{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:12px 24px}
+    .brand{display:flex;gap:10px;align-items:center;font-weight:700}
+    .brand-badge{display:grid;place-items:center;width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,var(--brand),var(--accent));color:white}
+    .brand-title{letter-spacing:0.2px}
+    .menu{display:flex;gap:14px;flex-wrap:wrap}
+    .menu a{padding:6px 10px;border-radius:10px;text-decoration:none;color:inherit}
+    .menu a:hover{background:rgba(96,165,250,.18)}
+    .search{display:flex;align-items:center;gap:8px;background:var(--light-card);border:1px solid #e2e8f0;border-radius:14px;padding:6px 10px;min-width:220px}
+    .search input{border:0;outline:0;background:transparent;width:100%}
+    @media (prefers-color-scheme: dark){.search{background:var(--card);border-color:#243044}}.hero{padding:48px 24px}
+.hero h1{font-size:clamp(28px,4vw,40px);line-height:1.2;margin:0 0 10px}
+.hero p{color:var(--light-muted)}
+@media (prefers-color-scheme: dark){.hero p{color:var(--muted)}}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.tag{font-size:12px;border:1px dashed #93c5fd;padding:6px 10px;border-radius:999px}
+
+.grid{display:grid;gap:16px}
+.grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:900px){.grid.cols-3{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:640px){.grid.cols-3,.grid.cols-2{grid-template-columns:1fr}}
+
+.card{background:var(--light-card);border:1px solid #e2e8f0;border-radius:16px;overflow:hidden}
+@media (prefers-color-scheme: dark){.card{background:var(--card);border-color:#243044}}
+.card .thumb{aspect-ratio:16/9;background:#e2e8f0}
+@media (prefers-color-scheme: dark){.card .thumb{background:#111827}}
+.card .pad{padding:16px}
+.card h3{margin:.2rem 0 .3rem;font-size:18px}
+.muted{color:var(--light-muted)}
+@media (prefers-color-scheme: dark){.muted{color:var(--muted)}}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid #e2e8f0;background:var(--light-card);text-decoration:none;color:inherit}
+.btn:hover{box-shadow:0 8px 24px rgba(2,6,23,.08)}
+@media (prefers-color-scheme: dark){.btn{background:var(--card);border-color:#243044}}
+
+section{padding:24px 0}
+section h2{font-size:22px;margin:0 0 14px}
+
+.pill{font-size:12px;padding:2px 8px;border:1px solid #334155;border-radius:999px}
+
+footer{margin-top:40px;border-top:1px solid #e2e8f0}
+@media (prefers-color-scheme: dark){footer{border-color:#1f2937}}
+.foot{display:flex;gap:16px;justify-content:space-between;flex-wrap:wrap;padding:20px 24px}
+
+/* Toast */
+.toast{position:fixed;right:16px;bottom:16px;background:#111827;color:#e5e7eb;padding:10px 14px;border-radius:12px;opacity:0;transform:translateY(10px);transition:.3s}
+.toast.show{opacity:1;transform:none}
+
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav container">
+      <div class="brand">
+        <div class="brand-badge">AI</div>
+        <div class="brand-title">AI HUB</div>
+      </div>
+      <div class="menu">
+        <a href="#news">ニュース</a>
+        <a href="#tools">ツール</a>
+        <a href="#guides">使い方</a>
+        <a href="#glossary">用語集</a>
+        <a href="#columns">コラム</a>
+      </div>
+      <label class="search" aria-label="サイト内検索">
+        🔎<input id="siteSearch" type="search" placeholder="サイト内検索…">
+      </label>
+    </nav>
+  </header>  <main class="container">
+    <section class="hero">
+      <h1>AIの“いま”が一目でわかるまとめサイト</h1>
+      <p class="muted">最新ニュース、注目ツール、実践ガイドを毎日キャッチアップ。管理は超かんたん、静的HTMLだけでOK。</p>
+      <div class="tags">
+        <span class="tag">#ニュース要約</span>
+        <span class="tag">#AIツール比較</span>
+        <span class="tag">#プロンプト集</span>
+      </div>
+    </section><!-- ニュース -->
+<section id="news">
+  <h2>最新ニュース</h2>
+  <div class="grid cols-3" id="newsList">
+    <!-- カード例 -->
+  </div>
+  <div style="margin-top:12px">
+    <button class="btn" id="addNews">＋ ニュースを追加</button>
+  </div>
+</section>
+
+<!-- ツール -->
+<section id="tools">
+  <h2>注目AIツール <span class="pill" id="toolCount">0件</span></h2>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+    <select id="toolCategory" class="btn" aria-label="ツールのカテゴリで絞り込み">
+      <option value="">すべて</option>
+      <option>文章生成</option>
+      <option>画像生成</option>
+      <option>音声/動画</option>
+      <option>コード支援</option>
+      <option>自動化</option>
+    </select>
+    <button class="btn" id="addTool">＋ ツールを追加</button>
+  </div>
+  <div class="grid cols-3" id="toolList"></div>
+</section>
+
+<!-- 使い方ガイド -->
+<section id="guides">
+  <h2>使い方ガイド</h2>
+  <div class="grid cols-2" id="guideList"></div>
+  <div style="margin-top:12px"><button class="btn" id="addGuide">＋ ガイド記事を追加</button></div>
+</section>
+
+<!-- 用語集 -->
+<section id="glossary">
+  <h2>用語集</h2>
+  <div id="glossaryList" class="grid cols-2"></div>
+  <div style="margin-top:12px"><button class="btn" id="addTerm">＋ 用語を追加</button></div>
+</section>
+
+<!-- コラム -->
+<section id="columns">
+  <h2>コラム・解説</h2>
+  <div class="grid cols-2" id="columnList"></div>
+  <div style="margin-top:12px"><button class="btn" id="addColumn">＋ コラムを追加</button></div>
+</section>
+
+  </main>  <footer>
+    <div class="foot container">
+      <div>© <span id="year"></span> AI HUB</div>
+      <div style="display:flex;gap:10px">
+        <a class="btn" href="#">X</a>
+        <a class="btn" href="#">YouTube</a>
+        <a class="btn" href="#">お問い合わせ</a>
+      </div>
+    </div>
+  </footer>  <div class="toast" id="toast" role="status" aria-live="polite"></div>  <script>
+    // ------- 初期データ（ここを書き換えるだけで更新OK） --------
+    const data = {
+      news: [
+        { title: "Open-source LLMの新バージョン公開", date: "2025-08-10", desc: "推論高速化と日本語性能が向上。ベンチマークで上位に。", url: "#", img: "https://picsum.photos/seed/llm/800/450" },
+        { title: "国内でAI規制の新ガイドライン", date: "2025-08-06", desc: "企業のAI活用における透明性と安全性の基準を提示。", url: "#", img: "https://picsum.photos/seed/policy/800/450" },
+        { title: "映像生成AIの商用プラン開始", date: "2025-08-01", desc: "著作権クリア素材の提供とAPI連携を強化。", url: "#", img: "https://picsum.photos/seed/video/800/450" }
+      ],
+      tools: [
+        { name: "ChatGPT", cat: "文章生成", desc: "文章要約・企画・コード補助まで万能。", url: "#", img: "https://picsum.photos/seed/chat/800/450" },
+        { name: "Midjourney", cat: "画像生成", desc: "高品質なイラスト/写真風の生成。", url: "#", img: "https://picsum.photos/seed/mid/800/450" },
+        { name: "Stable Diffusion", cat: "画像生成", desc: "ローカル実行や拡張で柔軟に使える。", url: "#", img: "https://picsum.photos/seed/sd/800/450" },
+        { name: "Whisper", cat: "音声/動画", desc: "高精度の音声認識エンジン。", url: "#", img: "https://picsum.photos/seed/whi/800/450" },
+        { name: "Codeium", cat: "コード支援", desc: "エディタ連携でコーディング効率UP。", url: "#", img: "https://picsum.photos/seed/cod/800/450" },
+        { name: "Zapier", cat: "自動化", desc: "ノーコードでワークフロー自動化。", url: "#", img: "https://picsum.photos/seed/zap/800/450" }
+      ],
+      guides: [
+        { title: "毎朝3分のAIニュース収集術", read: "5分", desc: "RSS+要約で爆速キャッチアップ。", url: "#" },
+        { title: "画像生成のプロンプト基本形", read: "7分", desc: "構図/スタイル/質感を言語化するコツ。", url: "#" },
+        { title: "社内でのAI活用ガイドライン作り", read: "8分", desc: "安全性と生産性の両立ポイント。", url: "#" }
+      ],
+      glossary: [
+        { term: "LLM", def: "大規模言語モデル。大量のテキストで学習したAI。" },
+        { term: "RAG", def: "外部データを検索して回答精度を上げる仕組み。" },
+        { term: "ベクトルDB", def: "意味ベースで検索できるデータベース。" }
+      ],
+      columns: [
+        { title: "生成AIと著作権のこれから", author: "編集部", url: "#" },
+        { title: "中小企業のAI導入チェックリスト", author: "編集部", url: "#" }
+      ]
+    };
+
+    // ------- DOMユーティリティ --------
+    const el = (tag, attrs = {}, children = []) => {
+      const node = document.createElement(tag);
+      Object.entries(attrs).forEach(([k,v]) => {
+        if(k === 'class') node.className = v;
+        else if(k === 'html') node.innerHTML = v;
+        else if(k.startsWith('on') && typeof v === 'function') node.addEventListener(k.substring(2), v);
+        else node.setAttribute(k, v);
+      });
+      children.forEach(c => node.appendChild(c));
+      return node;
+    };
+    const toast = (msg) => {
+      const t = document.getElementById('toast');
+      t.textContent = msg; t.classList.add('show');
+      setTimeout(()=>t.classList.remove('show'), 2200);
+    };
+
+    // ------- レンダリング --------
+    function renderNews(){
+      const wrap = document.getElementById('newsList'); wrap.innerHTML = '';
+      data.news.sort((a,b)=> b.date.localeCompare(a.date));
+      data.news.forEach(n=>{
+        const card = el('article', {class:'card', role:'article'} , [
+          el('a', {href:n.url, target:'_blank', rel:'noopener'}, [
+            el('div', {class:'thumb', style:`background:url(${n.img}) center/cover`})
+          ]),
+          el('div', {class:'pad'}, [
+            el('div', {class:'muted', html: new Date(n.date).toLocaleDateString('ja-JP')}),
+            el('h3', {html:n.title}),
+            el('p', {class:'muted', html:n.desc}),
+            el('a', {class:'btn', href:n.url, target:'_blank', rel:'noopener'}, [document.createTextNode('記事を読む →')])
+          ])
+        ]);
+        wrap.appendChild(card);
+      });
+    }
+
+    function renderTools(){
+      const list = document.getElementById('toolList'); list.innerHTML = '';
+      const cat = document.getElementById('toolCategory').value;
+      const filtered = data.tools.filter(t=> !cat || t.cat===cat);
+      document.getElementById('toolCount').textContent = filtered.length + '件';
+      filtered.forEach(t=>{
+        const card = el('article', {class:'card', role:'article'}, [
+          el('div', {class:'thumb', style:`background:url(${t.img}) center/cover`} ),
+          el('div', {class:'pad'}, [
+            el('div', {class:'pill', html:t.cat}),
+            el('h3', {html:t.name}),
+            el('p', {class:'muted', html:t.desc}),
+            el('a', {class:'btn', href:t.url, target:'_blank', rel:'noopener'}, [document.createTextNode('公式サイト →')])
+          ])
+        ]);
+        list.appendChild(card);
+      });
+    }
+
+    function renderGuides(){
+      const list = document.getElementById('guideList'); list.innerHTML = '';
+      data.guides.forEach(g=>{
+        const card = el('article', {class:'card'}, [
+          el('div', {class:'pad'}, [
+            el('h3', {html:g.title}),
+            el('p', {class:'muted', html:g.desc}),
+            el('a', {class:'btn', href:g.url, target:'_blank', rel:'noopener'}, [document.createTextNode(`読む（${g.read}） →`)])
+          ])
+        ]);
+        list.appendChild(card);
+      });
+    }
+
+    function renderGlossary(){
+      const list = document.getElementById('glossaryList'); list.innerHTML = '';
+      data.glossary.forEach(x=>{
+        const card = el('article', {class:'card'}, [
+          el('div', {class:'pad'}, [
+            el('h3', {html:x.term}),
+            el('p', {class:'muted', html:x.def})
+          ])
+        ]);
+        list.appendChild(card);
+      });
+    }
+
+    function renderColumns(){
+      const list = document.getElementById('columnList'); list.innerHTML = '';
+      data.columns.forEach(c=>{
+        const card = el('article', {class:'card'}, [
+          el('div', {class:'pad'}, [
+            el('h3', {html:c.title}),
+            el('p', {class:'muted', html:`著者：${c.author}`}),
+            el('a', {class:'btn', href:c.url, target:'_blank', rel:'noopener'}, [document.createTextNode('読む →')])
+          ])
+        ]);
+        list.appendChild(card);
+      });
+    }
+
+    // ------- 追加ボタン（ダイアログで手入力→即反映） --------
+    document.getElementById('addNews').onclick = () => {
+      const title = prompt('ニュースのタイトル'); if(!title) return;
+      const date = prompt('日付(YYYY-MM-DD)', new Date().toISOString().slice(0,10));
+      const desc = prompt('短い説明');
+      const url = prompt('URL', '#');
+      const img = prompt('画像URL (空でもOK)', 'https://picsum.photos/seed/news/800/450');
+      data.news.push({title,date,desc,url,img});
+      renderNews(); toast('ニュースを追加しました');
+    };
+
+    document.getElementById('addTool').onclick = () => {
+      const name = prompt('ツール名'); if(!name) return;
+      const cat = prompt('カテゴリ（文章生成/画像生成/音声/動画/コード支援/自動化など）','文章生成');
+      const desc = prompt('説明');
+      const url = prompt('公式URL', '#');
+      const img = prompt('画像URL (空でもOK)', 'https://picsum.photos/seed/tool/800/450');
+      data.tools.push({name,cat,desc,url,img});
+      renderTools(); toast('ツールを追加しました');
+    };
+
+    document.getElementById('addGuide').onclick = () => {
+      const title = prompt('ガイドのタイトル'); if(!title) return;
+      const read = prompt('想定読了時間（例：5分）', '5分');
+      const desc = prompt('説明');
+      const url = prompt('URL', '#');
+      data.guides.push({title,read,desc,url});
+      renderGuides(); toast('ガイド記事を追加しました');
+    };
+
+    document.getElementById('addTerm').onclick = () => {
+      const term = prompt('用語'); if(!term) return;
+      const def = prompt('定義・説明');
+      data.glossary.push({term,def});
+      renderGlossary(); toast('用語を追加しました');
+    };
+
+    document.getElementById('addColumn').onclick = () => {
+      const title = prompt('コラムのタイトル'); if(!title) return;
+      const author = prompt('著者', '編集部');
+      const url = prompt('URL', '#');
+      data.columns.push({title,author,url});
+      renderColumns(); toast('コラムを追加しました');
+    };
+
+    // 検索（タイトル・説明・用語に対してフィルタ）
+    const siteSearch = document.getElementById('siteSearch');
+    siteSearch.addEventListener('input', () => {
+      const q = siteSearch.value.toLowerCase();
+      // ニュース
+      [...document.querySelectorAll('#newsList article')].forEach((card,i)=>{
+        const n = data.news[i];
+        const hit = (n.title+n.desc).toLowerCase().includes(q);
+        card.style.display = hit ? '' : 'none';
+      });
+      // ツール
+      const cat = document.getElementById('toolCategory').value;
+      const filtered = data.tools.filter(t=> !cat || t.cat===cat);
+      [...document.querySelectorAll('#toolList article')].forEach((card,i)=>{
+        const t = filtered[i]; if(!t) return;
+        const hit = (t.name+t.desc+t.cat).toLowerCase().includes(q);
+        card.style.display = hit ? '' : 'none';
+      });
+      // ガイド
+      [...document.querySelectorAll('#guideList article')].forEach((card,i)=>{
+        const g = data.guides[i];
+        const hit = (g.title+g.desc).toLowerCase().includes(q);
+        card.style.display = hit ? '' : 'none';
+      });
+      // 用語
+      [...document.querySelectorAll('#glossaryList article')].forEach((card,i)=>{
+        const x = data.glossary[i];
+        const hit = (x.term+x.def).toLowerCase().includes(q);
+        card.style.display = hit ? '' : 'none';
+      });
+      // コラム
+      [...document.querySelectorAll('#columnList article')].forEach((card,i)=>{
+        const c = data.columns[i];
+        const hit = (c.title+c.author).toLowerCase().includes(q);
+        card.style.display = hit ? '' : 'none';
+      });
+    });
+
+    document.getElementById('toolCategory').addEventListener('change', renderTools);
+
+    // 初期化
+    document.getElementById('year').textContent = new Date().getFullYear();
+    renderNews(); renderTools(); renderGuides(); renderGlossary(); renderColumns();
+  </script></body>
+</html>
